@@ -4,11 +4,26 @@ import PlantList from "./PlantList";
 import Search from "./Search";
 
 function PlantPage() {
+
+  const [plants, setPlants] = React.useState([])
+  const [renderedPlants, setRenderedPlants] = React.useState([])
+  
+  React.useEffect(()=>getPlants(), [])
+
+  function getPlants(){
+    fetch("http://localhost:6001/plants")
+    .then(r=>r.json())
+    .then(data=>{
+      setPlants(data)
+      setRenderedPlants(data)
+    })
+  }
+
   return (
     <main>
-      <NewPlantForm />
-      <Search />
-      <PlantList />
+      <NewPlantForm plants={plants} setPlants={setPlants} setRenderedPlants={setRenderedPlants}/>
+      <Search plants={plants} setRenderedPlants={setRenderedPlants}/>
+      <PlantList plants={renderedPlants}/>
     </main>
   );
 }
